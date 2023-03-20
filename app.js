@@ -24,8 +24,7 @@ const start = async () => {
     process.env.MONGO_URL,
     { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
   );
-  const db = client().db;
-  const contacts = db.collection("contacts");
+
   console.log("Database connection successful");
   app.listen(PORT, () => {
     console.log("server is asign");
