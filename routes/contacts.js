@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { listContacts, getContactById, removeContact, addContacts, ChangeContacts } = require("../modules/contacts");
-const validateBody = require("../middlewares/validateBody");
+const { validateBody, validateCreateBody } = require("../middlewares/validateBody");
 const Joi = require("joi");
 
 const addContactsChema = Joi.object({
@@ -26,9 +26,10 @@ router.get("/:id", async (req, res) => {
   return res.status(200).json(data);
   // res.send(data);
 });
-router.post("/", validateBody(addContactsChema), async (req, res) => {
-  const { name, email, phone } = req.body;
-  const data = await addContacts(name, email, phone);
+router.post("/", validateCreateBody(addContactsChema), async (req, res) => {
+  const { name, email, phone, favorite } = req.body;
+  favorite ? favorite : false;
+  const data = await addContacts(name, email, phone, favorite);
   res.status(201).send(data);
   //   res.status(207).json({ mesage: `hello ${req.body.name} age:${req.body.age}`, status: "succsess", code: 201 });
 });
