@@ -18,7 +18,15 @@ app.use((err, req, res, next) => {
   const { message = "Server wronge", status = 500 } = err;
   res.status(status).json({ message });
 });
+
 const start = async () => {
+  const client = await mongoClient.connect(
+    process.env.MONGO_URL,
+    { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
+  );
+  const db = client().db;
+  const contacts = db.collection("contacts");
+  console.log("Database connection successful");
   app.listen(PORT, () => {
     console.log("server is asign");
   });
