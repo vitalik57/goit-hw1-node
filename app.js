@@ -1,6 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
-const mongoClient = require("mongodb").MongoClient;
+const MongoClient = require("mongodb").MongoClient;
 const cors = require("cors");
 const contactsRouter = require("./routes/contacts");
 require("dotenv").config();
@@ -20,11 +20,14 @@ app.use((err, req, res, next) => {
 });
 
 const start = async () => {
-  const client = await mongoClient.connect(
+  const client = await MongoClient.connect(
     process.env.MONGO_URL,
     { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
   );
-
+  const db = client.db();
+  const Contacts = db.collection("contacts");
+  const contacts = await Contacts.find({}).toArray();
+  console.log(contacts);
   console.log("Database connection successful");
   app.listen(PORT, () => {
     console.log("server is asign");
